@@ -1,0 +1,84 @@
+{% extends 'index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>焊材报告title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href={% static 'layui-v2.9.20/layui/css/layui.css' %} >
+    
+</head>
+<body>
+{% block content %}
+    <a href="{% url 'download_base_excel' %}" class="layui-btn">下载模板list</a>
+    <a href="{% url 'download_docx_files' %}" class="layui-btn">下载模板docx</a>
+    <br><br>
+<form class="layui-form"  action="{% url 'get_form_data' %}" method="post">
+{% csrf_token %}
+  <div class="layui-form-item">
+    <div class="layui-inline">
+       <label class="layui-form-label">使用标准</label>
+            <div class="layui-input-block">
+                <input type="text" name="standard" required lay-verify="required" value="GB/T 714-2015"
+                    autocomplete="off" class="layui-input">
+            </div>
+    </div>
+  </div>
+  <div class="layui-inline">
+      <label class="layui-form-label">使用标准</label>  
+      <div class="layui-input-inline">
+        <select name="modules" lay-verify="required" lay-search>
+          <option value="">直接选择或搜索选择</option>
+          <option value="1">GB/T 714-2015</option>
+          <option value="2">GB/T 1591</option>
+        </select>
+      </div>
+    </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+        <!-- 提交按钮，lay-submit 表示提交表单，lay-filter 用于表单元素的筛选 -->
+        <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+    
+<script src={% static 'jquery-3.7.1.min.js' %}></script>
+<script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
+
+<script>
+
+layui.use(['form', 'laydate', 'util'], function(){
+  var form = layui.form;
+  var layer = layui.layer;
+  form.render();
+  // 提交事件
+  form.on('submit(formDemo)', function(data){
+    var field = data.field; // 获取表单字段值
+    key = Object.keys(field);
+    delete field[key[0]]; // 删除第一个元素
+    str_res = ""; // 转换为 JSON 字符串
+    for (var i in field) {
+      str_res += i + ":" + field[i] + "<br>";
+    }
+    // 显示填写结果
+    layer.alert(str_res, {
+      title: '当前填写的字段值'
+    }, function(index){
+      // 在提示框关闭后执行的操作
+      // 此处可执行 Ajax 等操作
+      layer.close(index)
+    });
+    return false; // 阻止默认 form 跳转
+  });
+});
+
+
+</script>
+{% endblock %}
+</body>
+</html>
+
+
+
