@@ -3,14 +3,33 @@ import zipfile
 from io import BytesIO
 import docx
 from django.http import JsonResponse, HttpResponse
-path_all = 'Auto_LH/GB_Script/report/'
+from django.shortcuts import render
+
+path_all = 'Auto_LH/GB_Script/report_template/'
 
 
 def get_form_data(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        # 处理表单数据
-        return HttpResponse(f'接收到的用户名：{username}')
+        form_data = request.POST
+        project_name = form_data.get('project_name')  # 项目名称
+        entrust_name = form_data.get('entrust_name')  # 委托单位
+        sample_name = form_data.get('sample_name')  # 样品名称
+        report_date = form_data.get('report_date')  # 报告日期
+        number_of_report = form_data.get('number_of_report')  # 报告编号
+        first_no = form_data.get('first_no')  # 首份报告编号
+        come_date = form_data.get('come_date')  # 受样日期
+        raw_no_type = form_data.getlist('raw_no_type')  # 原样编号类型
+        standard = form_data.get('standard')  # 使用标准
+        material = form_data.get('material')  # 材质
+        thickness = form_data.get('thickness')  # 厚度
+        status = form_data.get('status')  # 状态
+        raw_no = form_data.get('raw_no')  # 原样编号
+        print(first_no, project_name, entrust_name, sample_name, report_date, number_of_report, first_no, come_date,
+              raw_no_type, standard, material, thickness, status, raw_no)
+        
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=204)
 
 
 def download_base_excel(request):

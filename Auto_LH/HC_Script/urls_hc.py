@@ -5,6 +5,5 @@ from Auto_LH import views
 
 urlpatterns = [
     path("", views.hc, name="hc"),
-    path('download_base_excel/', views_hc.download_base_excel, name='download_base_excel'),
-    path('download_docx_files/', views_hc.download_docx_files, name='download_docx_files'),
+
 ]

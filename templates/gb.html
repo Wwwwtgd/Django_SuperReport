@@ -4,10 +4,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>焊材报告title</title>
+    <title>钢板报告</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href={% static 'layui-v2.9.20/layui/css/layui.css' %} >
-    
+
 </head>
 <body>
 {% block content %}
@@ -16,33 +16,129 @@
     <br><br>
 <form class="layui-form"  action="{% url 'get_form_data' %}" method="post">
 {% csrf_token %}
+
+
   <div class="layui-form-item">
-    <div class="layui-inline">
-       <label class="layui-form-label">使用标准</label>
-            <div class="layui-input-block">
-                <input type="text" name="standard" required lay-verify="required" value="GB/T 714-2015"
-                    autocomplete="off" class="layui-input">
+
+      <div class="layui-inline">
+            <label class="layui-form-label" >项目名称</label>
+            <div class="layui-input-inline" style="width: 180px;">
+                <input type="text" name="project_name" class="layui-input">
             </div>
-    </div>
-  </div>
-  <div class="layui-inline">
-      <label class="layui-form-label">使用标准</label>  
+        </div>
+      <div class="layui-inline">
+            <label class="layui-form-label" style="width:60px;">委托单位</label>
+            <div class="layui-input-inline" style="width: 180px;">
+                <input type="text" name="entrust_name" class="layui-input">
+            </div>
+        </div>
+    <div class="layui-inline">
+      <label class="layui-form-label"  style="width:60px;">样品名称</label>
       <div class="layui-input-inline">
-        <select name="modules" lay-verify="required" lay-search>
-          <option value="">直接选择或搜索选择</option>
-          <option value="1">GB/T 714-2015</option>
-          <option value="2">GB/T 1591</option>
+        <select name="sample_name" lay-verify="required" lay-search>
+          <option value="钢板原材" selected>钢板原材</option>
+          <option value="直缝钢管">直缝钢管</option>
         </select>
       </div>
     </div>
-  <div class="layui-form-item">
+      <div class="layui-inline" >
+        <label class="layui-form-label"  style="width:60px;">报告日期</label>
+          <div class="layui-input-inline layui-input-wrap" style="width: 150px;">
+            <div class="layui-input-prefix">
+              <i class="layui-icon layui-icon-date"></i>
+            </div>
+            <input type="text" name="report_date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+  </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline" >
+          <label class="layui-form-label">报告数量</label>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="number" id="rowCountInput" name="number_of_report"  placeholder="" autocomplete="off" class="layui-input" min="1" step="1" >
+          </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:100px;">首份控制编号</label>
+            <div class="layui-input-inline" style="width: 180px;">
+            <input type="text" name="first_no" placeholder="例：ZJC018-24-GB-001" class="layui-input">
+                </div>
+        </div>
+        <div class="layui-inline">
+        <label class="layui-form-label" style="width:60px;">受样日期</label>
+          <div class="layui-input-inline layui-input-wrap">
+            <div class="layui-input-prefix">
+              <i class="layui-icon layui-icon-date"></i>
+            </div>
+            <input type="text" name="come_date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+    <label class="layui-form-label">原编号项</label>
     <div class="layui-input-block">
-        <!-- 提交按钮，lay-submit 表示提交表单，lay-filter 用于表单元素的筛选 -->
-        <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
-        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <input type="checkbox" name="raw_no_type" value="炉号" title="炉号"  checked>
+      <input type="checkbox" name="raw_no_type" value="批号" title="批号">
+      <input type="checkbox" name="raw_no_type" value="钢板号" title="钢板号">
+    </div>
+    </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">检测元素</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="chemical" value="CSiMnPS" title="C、Si、Mn、P、S" checked>
+      <input type="checkbox" name="chemical" value="NbVTIAl" title="Nb、V、Ti、Al" >
+      <input type="checkbox" name="chemical" value="Cr" title="Cr" >
+      <input type="checkbox" name="chemical" value="Ni" title="Ni" >
+      <input type="checkbox" name="chemical" value="CuMo" title="Cu" >
+      <input type="checkbox" name="chemical" value="Mo" title="Mo" >
+      <input type="checkbox" name="chemical" value="N" title="N" >
     </div>
   </div>
+
+    <div class="layui-form-item">
+         <label class="layui-form-label">Z向性能</label>
+
+        <div class="layui-inline" >
+        <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" title="有|无">
+        </div>
+        <div class="layui-inline" >
+            <div class="layui-input-inline" id="z_status" style="display:none;height: 30px;">
+            <select name="z_status" lay-verify="required" lay-search >
+              <option value="Z35" selected>Z35</option>
+              <option value="Z25">Z25</option>
+              <option value="Z15">Z15</option>
+            </select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <table class="layui-table" id="first_table">
+            <thead>
+                <tr>
+                    <th style="text-align: center">原编号</th>
+                    <th style="text-align: center">验收标准</th>
+                    <th style="text-align: center">材质</th>
+                    <th style="text-align: center">规格 (给你复制的 δ=20mm, t=20mm)</th>
+                    <th style="text-align: center">样品状态</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
 </form>
+
     
 <script src={% static 'jquery-3.7.1.min.js' %}></script>
 <script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
@@ -52,6 +148,23 @@
 layui.use(['form', 'laydate', 'util'], function(){
   var form = layui.form;
   var layer = layui.layer;
+  var laydate = layui.laydate;
+
+  form.on('switch(switchTest)', function(data){
+        if(data.elem.checked){
+          console.log('开关已打开');
+          $('#z_status').show();
+        } else {
+          console.log('开关已关闭');
+          $('#z_status').hide();
+        }
+    });
+
+  // 日期
+  laydate.render({
+    elem: '#date'
+  });
+
   form.render();
   // 提交事件
   form.on('submit(formDemo)', function(data){
@@ -65,15 +178,84 @@ layui.use(['form', 'laydate', 'util'], function(){
     // 显示填写结果
     layer.alert(str_res, {
       title: '当前填写的字段值'
-    }, function(index){
-      // 在提示框关闭后执行的操作
-      // 此处可执行 Ajax 等操作
-      layer.close(index)
+    }, function () {
+
     });
-    return false; // 阻止默认 form 跳转
+    return true; // 阻止默认 form 跳转
   });
 });
 
+
+ layui.use('form', function () {
+            var form = layui.form;
+            form.render('select');
+            // 监听输入框变化事件
+            document.getElementById('rowCountInput').addEventListener('input', function () {
+                var rowCount = parseInt(this.value);
+                var tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+                for (var i = 0; i < rowCount; i++) {
+                    var row = document.createElement('tr');
+
+                    // 选择 1
+                    var select1Cell = document.createElement('td');var select1 = document.createElement('select');select1.classList.add('layui-select');
+                    var option11 = document.createElement('option');
+                    option11.setAttribute('value', 'GB/T 714-2015');option11.textContent = 'GB/T 714-2015';
+                    option11.setAttribute('name', "standard");option11.setAttribute('selected', true); // 设置为默认选中
+                    var option12 = document.createElement('option');option12.setAttribute('value', 'GB/T 1591-2018');option12.textContent = 'GB/T 1591-2018';
+                    var option13 = document.createElement('option');option13.setAttribute('value', 'GB/T 700-2006');option13.textContent = 'GB/T 700-2006';
+                    var option14 = document.createElement('option');option14.setAttribute('value', 'GB/T 700-2006');option14.textContent = 'GB/T 700-2006';
+                    var option15 = document.createElement('option');option15.setAttribute('value', 'GB/T 712-2011');option15.textContent = 'GB/T 712-2011';
+                    var option16 = document.createElement('option');option16.setAttribute('value', 'TB/T 3556-2020');option16.textContent = 'TB/T 3556-2020';
+                    select1.appendChild(option11);select1.appendChild(option12);select1.appendChild(option13);select1.appendChild(option14);select1.appendChild(option15);select1.appendChild(option16);
+                    select1Cell.appendChild(select1);
+                    // 输入 1
+                    var input1Cell = document.createElement('td');var input1 = document.createElement('input');
+                    input1.classList.add('layui-input');input1.setAttribute('type', 'text');input1.setAttribute('name', 'material');
+                    input1.addEventListener('change', function () {
+                    var validValues = ["Q345qC", "Q345qD", "Q345qE","Q355qC", "Q355qD", "Q355qE","Q370qC", "Q370qD", "Q370qE","Q355qE","Q420qC", "Q420qD", "Q420qE"];
+                    if (!validValues.includes(this.value)) {alert("请输入正确的值" + this.value);this.value = "";}});
+                    input1Cell.appendChild(input1);
+                    // 输入 2
+                    var input2Cell = document.createElement('td');var input2 = document.createElement('input');input2.setAttribute("name", "thickness ")
+                    input2.classList.add('layui-input');input2.setAttribute('type', 'text');input2.setAttribute('placeholder', '如：δ=20mm');
+                    input2Cell.appendChild(input2);
+
+                    // 选择 2
+                    var select2Cell = document.createElement('td');var select2 = document.createElement('select');select2.classList.add('layui-select');select2.setAttribute('name', "status");
+                    var option21 = document.createElement('option');option21.setAttribute('value', 'TMCP');option21.textContent = 'TMCP(热机械轧制)';option21.setAttribute('selected', true); // 设置为默认选中
+                    var option22 = document.createElement('option');option22.setAttribute('value', 'AR');option22.textContent = 'AR(热轧)';
+                    var option23 = document.createElement('option');option23.setAttribute('value', 'N');option23.textContent = 'N(正火)';
+                    var option24 = document.createElement('option');option24.setAttribute('value', 'NH');option24.textContent = 'NH(耐腐蚀)';
+                    var option25 = document.createElement('option');option25.setAttribute('value', 'T');option25.textContent = 'T(回火)';
+                    var option26 = document.createElement('option');option26.setAttribute('value', 'NR');option26.textContent = 'NR(正火轧制)';
+                    var option27 = document.createElement('option');option27.setAttribute('value', 'QT');option27.textContent = 'QT(淬火加回火[调质])';
+                    var option28 = document.createElement('option');option28.setAttribute('value', 'NT');option28.textContent = 'NT(正火加回火)';
+                    var option29 = document.createElement('option');option29.setAttribute('value', 'A');option29.textContent = 'A(退火)';
+                    var option30 = document.createElement('option');option30.setAttribute('value', 'CR');option30.textContent = 'CR(冷轧)';
+                    select2.appendChild(option21);select2.appendChild(option22);select2.appendChild(option23);select2.appendChild(option24);select2.appendChild(option25);
+                    select2.appendChild(option26);select2.appendChild(option27);select2.appendChild(option28);select2.appendChild(option29);select2.appendChild(option30);
+                    select2Cell.appendChild(select2);
+
+                    // 输入原编号
+                    var input4Cell = document.createElement('td');var input4 = document.createElement('input');
+                    input4.setAttribute("name", "raw_no")
+                    input4.classList.add('layui-input');input4.setAttribute('type', 'text');
+                    input4Cell.appendChild(input4);
+
+                    row.appendChild(input4Cell);
+                    row.appendChild(select1Cell);
+                    row.appendChild(input1Cell);
+                    row.appendChild(input2Cell);
+                    row.appendChild(select2Cell);
+                    tableBody.appendChild(row);
+
+
+                }
+
+                form.render('select');
+            });
+        });
 
 </script>
 {% endblock %}
