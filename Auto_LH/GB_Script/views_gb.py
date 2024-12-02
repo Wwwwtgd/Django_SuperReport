@@ -1,9 +1,8 @@
 import os
 import zipfile
 from io import BytesIO
-import docx
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+
 
 path_all = 'Auto_LH/GB_Script/report_template/'
 
@@ -23,13 +22,12 @@ def get_form_data(request):
         material = form_data.get('material')  # 材质
         thickness = form_data.get('thickness')  # 厚度
         status = form_data.get('status')  # 状态
-        raw_no = form_data.get('raw_no')  # 原样编号
-        print(first_no, project_name, entrust_name, sample_name, report_date, number_of_report, first_no, come_date,
-              raw_no_type, standard, material, thickness, status, raw_no)
-        
+        lh = form_data.get('lh')  # 炉号
+        ph = form_data.get('ph')  # 批号
+        gbh = form_data.get('gbh')  # 钢板号
+        print(form_data)
         return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=204)
+    return HttpResponse(status=404)
 
 
 def download_base_excel(request):
