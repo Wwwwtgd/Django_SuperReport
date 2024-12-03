@@ -14,6 +14,7 @@ def get_form_data(request):
         entrust_name = form_data.get('entrust_name')  # 委托单位
         sample_name = form_data.get('sample_name')  # 样品名称
         report_date = form_data.get('report_date')  # 报告日期
+
         number_of_report = form_data.get('number_of_report')  # 报告编号
         first_no = form_data.get('first_no')  # 首份报告编号
         come_date = form_data.get('come_date')  # 受样日期

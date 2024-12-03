@@ -14,7 +14,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="auto_edit" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="autoedit" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="element-ui" level="application" />
   </component>
