@@ -1,0 +1,7 @@
+要添加内容，步骤如下：
+
+1. 打开 /templates/index.html 添加 herf {% url 'cs' %}  //添加主页面新按钮打开新页面
+2. 新建当前页面要放入的 app, 在 settings.py 中添加 app 到 INSTALLED_APPS
+3. 在当前 app 中新建一个 urls.py 文件，在其中添加 urlpatterns 导向 app 的 urls.py 文件
+4. 在 app 的 urls.py 文件中添加 urlpatterns 导向当前页面的 views.py 文件, views.py 中放的是页面的具体内容
+5. 在 app 目录下再建一个 ut 目录，用于存放它实现的方法和函数

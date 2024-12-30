@@ -2,123 +2,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>超级报告系统</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href={% static 'layui-v2.9.20/layui/css/layui.css' %} >
+    <meta charset="utf-8">
+    <title>超级报告系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href={% static 'layui-v2.9.20/layui/css/layui.css' %}>
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
-  <div class="layui-header">
-    <div class="layui-logo layui-hide-xs layui-bg-black">超级报告系统</div>
-    <!-- 头部区域（可配合layui 已有的水平导航） -->
-    <ul class="layui-nav layui-layout-left">
-      <!-- 移动端显示 -->
-      <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-        <i class="layui-icon layui-icon-spread-left"></i>
-      </li>
-      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">？</a></li>
-      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">？</a></li>
-      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">？</a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;">？</a>
-        <dl class="layui-nav-child">
-          <dd><a href="javascript:;">？</a></dd>
-          <dd><a href="javascript:;">？</a></dd>
-          <dd><a href="javascript:;">？</a></dd>
-        </dl>
-      </li>
-    </ul>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
-        <a href="javascript:;">
-          <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
-          tester
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="javascript:;">？</a></dd>
-          <dd><a href="javascript:;">？</a></dd>
-          <dd><a href="javascript:;">？</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
-        <a href="javascript:;">
-          <i class="layui-icon layui-icon-more-vertical"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree" lay-filter="test">
-        <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;">理化试验报告</a>
-          <dl class="layui-nav-child">
-            <dd><a href="{% url 'gb' %}">钢板报告</a></dd>
-            <dd><a href="{% url 'hc' %}">焊材试板</a></dd>
-            <dd><a href="{% url 'hp' %}">焊评试板</a></dd>
-            <dd><a href="{% url 'cs' %}">产品试板</a></dd>
-          </dl>
-        </li>
-        <li class="layui-nav-item">
-          <a href="javascript:;">现场无损报告</a>
-          <dl class="layui-nav-child">
-            <dd><a href="javascript:;">UT</a></dd>
-            <dd><a href="javascript:;">MT</a></dd>
-            <dd><a href="javascript:;">RT</a></dd>
-          </dl>
-        </li>
-        <li class="layui-nav-item"><a href="javascript:;">？</a></li>
-        <li class="layui-nav-item"><a href="javascript:;">？</a></li>
-      </ul>
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black">超级报告系统</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <!-- 移动端显示 -->
+            <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+                <i class="layui-icon layui-icon-spread-left"></i>
+            </li>
+            <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">暂</a></li>
+            <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">未</a></li>
+            <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">开</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">发</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">不</a></dd>
+                    <dd><a href="javascript:;">骗</a></dd>
+                    <dd><a href="javascript:;">你</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
+                <a href="javascript:;">
+                    <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
+                    视正管理员
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">id</a></dd>
+                    <dd><a href="javascript:;">权限</a></dd>
+                    <dd><a href="javascript:;">设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-more-vertical"></i>
+                </a>
+            </li>
+        </ul>
     </div>
-  </div>
-  <div class="layui-body">
-    <!-- 内容主体区域 -->
-    <div style="padding:15px 15px 44px 15px">
-      <blockquote class="layui-elem-quote layui-text">
-        请填写下面的信息
-      </blockquote>
-      {% block content %}{% endblock %}
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">理化试验报告</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{% url 'gb' %}">钢板原材报告</a></dd>
+                        <dd><a href="{% url 'hc' %}">焊材试板报告</a></dd>
+                        <dd><a href="{% url 'hp' %}">焊评试板报告</a></dd>
+                        <dd><a href="{% url 'cs' %}">产品试板报告</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item  layui-nav-itemed">
+                    <a href="javascript:;">现场无损报告</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{% url 'ut' %}">UT超声报告</a></dd>
+                        <dd><a href="javascript:;">MT磁粉报告</a></dd>
+                        <dd><a href="javascript:;">RT射线报告</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:;">小工具</a></li>
+                <li class="layui-nav-item"><a href="javascript:;">-------------------------</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
-  <div class="layui-footer">
-    <!-- 底部固定区域 -->
-    若出现Bug或相关问题，请联系微信号:WwwwTgd
-  </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding:15px 15px 44px 15px">
+            <blockquote class="layui-elem-quote layui-text">
+                请填写下面的信息
+            </blockquote>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        若出现Bug或相关问题，请联系微信号:WwwwTgd
+    </div>
 </div>
 
 <script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
 <script>
-//JS
-layui.use(['element', 'layer', 'util'], function(){
-  var element = layui.element;
-  var layer = layui.layer;
-  var util = layui.util;
-  var $ = layui.$;
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var util = layui.util;
+        var $ = layui.$;
 
-  //头部事件
-  util.event('lay-header-event', {
-    menuLeft: function(othis){ // 左侧菜单事件
-      layer.msg('展开左侧菜单的操作', {icon: 0});
-    },
-    menuRight: function(){  // 右侧菜单事件
-      layer.open({
-        type: 1,
-        title: '更多',
-        content: '<div style="padding: 15px;">处理右侧面板的操作</div>',
-        area: ['260px', '100%'],
-        offset: 'rt', // 右上角
-        anim: 'slideLeft', // 从右侧抽屉滑出
-        shadeClose: true,
-        scrollbar: false
-      });
-    }
-  });
-});
+        //头部事件
+        util.event('lay-header-event', {
+            menuLeft: function (othis) { // 左侧菜单事件
+                layer.msg('展开左侧菜单的操作', {icon: 0});
+            },
+            menuRight: function () {  // 右侧菜单事件
+                layer.open({
+                    type: 1,
+                    title: '更多',
+                    content: '<div style="padding: 15px;">我爱上班，上班使我老板快乐！</div>',
+                    area: ['260px', '100%'],
+                    offset: 'rt', // 右上角
+                    anim: 'slideLeft', // 从右侧抽屉滑出
+                    shadeClose: true,
+                    scrollbar: false
+                });
+            }
+        });
+    });
 </script>
 </body>
 </html>

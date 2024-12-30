@@ -1,0 +1,149 @@
+{% extends 'index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>超声检测报告</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href={% static 'layui-v2.9.20/layui/css/layui.css' %}>
+    <link rel="stylesheet" href={% static 'my.css' %}>
+
+</head>
+<body>
+
+{% block content %}
+    {% csrf_token %}
+    <hr>
+    <h3>1、请下载模板表格，填写相关信息后，上传到本网站。</h3>
+    <br>
+    <div class="layui-btn-container">
+        <a href="{% url 'download_base_excel' %}" class="layui-btn">下载模板</a>
+    </div>
+    <hr>
+    <h3>2、请上传示意图。</h3>
+    <br>
+    <button type="button" class="layui-btn" id="ID-upload-demo-btn">
+        <i class="layui-icon layui-icon-upload"></i> 上传示意图
+    </button>
+    <div style="width: 132px;">
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="ID-upload-demo-img" style="width: 100%; height: 92px;">
+            <div id="ID-upload-demo-text"></div>
+        </div>
+        <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
+            <div class="layui-progress-bar" lay-percent=""></div>
+        </div>
+    </div>
+    <hr>
+    <h3>3、请上传填写好的 Excel 文件，文件格式为.xls 或.xlsx，并点击“开始生成”按钮，即可生成报告。</h3>
+    <br>
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-choose">选择文件</button>
+        <button type="button" class="layui-btn" id="ID-upload-demo-action" lay-on="test-alert">开始生成</button>
+    </div>
+    <hr>
+    <h3>4、等待报告生成完毕，请点击“下载报告”按钮，下载报告。</h3>
+    <br>
+    <div class="layui-btn-container">
+        <a href="{% url 'download_report' %}" class="layui-btn" id="ID-download-report"
+           style="display: none;">下载报告</a>
+    </div>
+
+    <script src={% static 'jquery-3.7.1.min.js' %}></script>
+    <script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
+    <script>
+        layui.use(function () {
+            var layer = layui.layer;
+            var upload = layui.upload;
+            var util = layui.util;
+            var element = layui.element;
+            var $ = layui.$;
+
+            // 获取 CSRF Token
+            var csrfToken = '{{ csrf_token }}';
+
+            // 渲染上传组件
+            upload.render({
+                elem: '#ID-upload-demo-choose',
+                url: '{% url 'get_ut_list' %}',  // 你的上传接口
+                auto: false,
+                bindAction: '#ID-upload-demo-action',
+                accept: 'file',  // 允许上传文件
+                exts: 'xls|xlsx',  // 限制文件类型为 Excel 文件（.xls 或 .xlsx）
+                headers: {
+                    'X-CSRFToken': csrfToken  // 添加 CSRF Token
+                },
+                before: function (obj) {
+                    $('#ID-download-report').hide();
+                    layer.msg('正在上传，请稍候');
+                },
+                done: function (res) {
+                    $('#ID-download-report').show();
+                    layer.msg('上传成功，正在处理');
+                    console.log(res);
+                },
+                error: function () {
+                    layer.msg('上传失败，请重试');
+                }
+            });
+            util.on('lay-on', {
+                "test-alert": function () {
+                    // 示范对话框所有内置图标
+                    layer.alert('等待下载报告按钮显示后，点击下载报告按钮即可下载报告', {
+                        icon: 1,
+                        shadeClose: true,
+                        title: '正在生成报告，请稍候'
+                    });
+                },
+            });
+
+            // 单图片上传
+            var uploadInst = upload.render({
+                elem: '#ID-upload-demo-btn',
+                url: '{% url 'update_picture' %}', // 实际使用时改成您自己的上传接口即可。
+                headers: {
+                    'X-CSRFToken': csrfToken  // 添加 CSRF Token
+                },
+                before: function (obj) {
+                    // 预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#ID-upload-demo-img').attr('src', result); // 图片链接（base64）
+                    });
+                    element.progress('filter-demo', '0%'); // 进度条复位
+                    layer.msg('上传中', {icon: 16, time: 0});
+                },
+                done: function (res) {
+                    // 若上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    // 上传成功的一些操作
+                    // …
+                    $('#ID-upload-demo-text').html(''); // 置空上传失败的状态
+                },
+                error: function () {
+                    // 演示失败状态，并实现重传
+                    var demoText = $('#ID-upload-demo-text');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                },
+                // 进度条
+                progress: function (n, elem, e) {
+                    element.progress('filter-demo', n + '%'); // 可配合 layui 进度条元素使用
+                    if (n == 100) {
+                        layer.msg('上传完毕', {icon: 1});
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+</body>
+</html>
+
+
+
