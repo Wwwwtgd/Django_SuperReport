@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*', ]
 
+CSRF_TRUSTED_ORIGINS = ['https://337e-117-63-207-156.ngrok-free.app']
+
 
 # Application definition
 
@@ -128,3 +130,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+

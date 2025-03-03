@@ -13,10 +13,9 @@
 <body>
 
 {% block content %}
-    <a href="{% url 'download_base_excel' %}" class="layui-btn">下载模板list</a>
-    <a href="{% url 'download_docx_files' %}" class="layui-btn">下载模板docx</a>
+    <a href="{% url 'download_gb_base_excel' %}" class="layui-btn">下载模板</a>
     <br><br>
-    <form class="layui-form" action="{% url 'get_form_data' %}" method="post">
+    <form class="layui-form" action="{% url 'get_form_gb_data' %}" method="post">
         {% csrf_token %}
         <div class="layui-form-item">
             <label class="layui-form-label" style="width: 60px;padding-left: 0;">项目名称</label>
@@ -34,44 +33,40 @@
                     <option value="直缝钢管">直缝钢管</option>
                 </select>
             </div>
-            <label class="layui-form-label" style="width:60px;">生产厂家</label>
-            <div class="layui-input-inline" style="width: 180px;">
-                <input type="text" name="manufacturer" class="layui-input" lay-verify="required" value="/">
-            </div>
+
+
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: 60px;padding-left: 0;">要求附加</label>
                 <div class="layui-inline">
-                    <input type="checkbox" name="jl_open" lay-filter="checkboxFilter" title="监理单位"
+                    <input type="checkbox" lay-filter="jl" title="监理单位 / 见证人"
                            checked>
                 </div>
                 <div class="layui-inline">
-                    <input type="checkbox" name="qy_open" lay-filter="checkboxFilter" title="见证单位"
-                           checked>
-                </div>
-                <div class="layui-inline">
-                    <input type="checkbox" name="jz_r_open" lay-filter="checkboxFilter" title="见证人"
-                           checked>
-                </div>
-                <div class="layui-inline">
-                    <input type="checkbox" name="qy_open" lay-filter="checkboxFilter" title="取样单位">
-                </div>
-                <div class="layui-inline">
-                    <input type="checkbox" name="qy_r_open" lay-filter="checkboxFilter" title="取样人">
+                    <input type="checkbox" lay-filter="qy" title="取样单位 / 取样人">
                 </div>
             </div>
 
         </div>
-        <div class="layui-form-item"  id="jl">
+        <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label" name="jl_company" style="width: 60px;padding-left: 0;">监理单位</label>
+                <label class="layui-form-label" id="jl1" style="width: 60px;padding-left: 0;">监理单位</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="jl_text">
+                    <input type="text" class="layui-input" name="jl_c_text" value="/">
                 </div>
-                <label class="layui-form-label" name="jl_r" style="width: 50px">见证人</label>
+                <label class="layui-form-label" id="jl2" style="width: 50px">见证人</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="jl_r_text">
+                    <input type="text" class="layui-input" name="jl_r_text" value="/">
+                </div>
+                <label class="layui-form-label" id="qy1"
+                       style="width: 60px;padding-left: 0;display:none;">取样单位</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" style="display:none;" name="qy_c_text" value="/">
+                </div>
+                <label class="layui-form-label" id="qy2" style="width: 50px;display:none;">取样人</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" style="display:none;" name="qy_r_text" value="/">
                 </div>
             </div>
         </div>
@@ -80,7 +75,7 @@
             <label class="layui-form-label" style="width: 60px;padding-left: 0;">报告数量</label>
             <div class="layui-input-inline">
                 <input type="number" lay-affix="number" id="rowCountInput" name="number_of_report" placeholder=""
-                       autocomplete="off" class="layui-input" min="1" step="1" lay-filter="rowCountInput"
+                       autocomplete="off" class="layui-input" min="1" step="1" lay-filter="rowCountInput" value="5"
                        lay-verify="required">
             </div>
         </div>
@@ -90,22 +85,7 @@
                 <input type="text" name="first_no" placeholder="填写首份报告的控制编号" class="layui-input"
                        lay-verify="required">
             </div>
-            <label class="layui-form-label">报告日期</label>
-            <div class="layui-input-inline layui-input-wrap" style="width: 150px;">
-                <div class="layui-input-prefix">
-                    <i class="layui-icon layui-icon-date"></i>
-                </div>
-                <input type="text" name="report_date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-                       autocomplete="off" class="layui-input" lay-verify="required">
-            </div>
-            <label class="layui-form-label">受样日期</label>
-            <div class="layui-input-inline layui-input-wrap">
-                <div class="layui-input-prefix">
-                    <i class="layui-icon layui-icon-date"></i>
-                </div>
-                <input type="text" name="come_date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-                       autocomplete="off" class="layui-input" lay-verify="required">
-            </div>
+
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label" style="width: 60px;padding-left: 0;">原编号项</label>
@@ -115,6 +95,7 @@
                 <input type="checkbox" name="raw_no_type" lay-filter="gbh" value="钢板号" title="钢板号">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label" style="width: 60px;padding-left: 0;">检测元素</label>
             <div class="layui-input-block">
@@ -122,7 +103,7 @@
                 <input type="checkbox" name="chemical" value="NbVTIAl" title="Nb、V、Ti、Al">
                 <input type="checkbox" name="chemical" value="Cr" title="Cr">
                 <input type="checkbox" name="chemical" value="Ni" title="Ni">
-                <input type="checkbox" name="chemical" value="CuMo" title="Cu">
+                <input type="checkbox" name="chemical" value="Cu" title="Cu">
                 <input type="checkbox" name="chemical" value="Mo" title="Mo">
                 <input type="checkbox" name="chemical" value="N" title="N">
             </div>
@@ -130,35 +111,50 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="width: 60px;padding-left: 0;">Z 向性能</label>
             <div class="layui-inline">
-                <input type="checkbox" name="zopen" lay-skin="switch" lay-filter="switchTest" title="有|无">
+                <input type="checkbox" name="z_open" lay-skin="switch" lay-filter="switchTest" title="有|无">
             </div>
             <div class="layui-inline">
                 <div class="layui-input-inline" id="z_status" style="display:none;height: 30px;">
-                    <select name="z_status" lay-search>
-                        <option value="Z35" selected>Z35</option>
-                        <option value="Z25">Z25</option>
-                        <option value="Z15">Z15</option>
+                    <select lay-search>
+                        <option value="Z35" name="z_status" selected>Z35</option>
+                        <option value="Z25" name="z_status">Z25</option>
+                        <option value="Z15" name="z_status">Z15</option>
                     </select>
                 </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <table class="layui-table" id="first_table">
+        <style>
+            /* 修改 layui 表格的单元格内边距 */
+            .layui-table td, .layui-table th {
+                padding: 5px 5px; /* 调整上下和左右的内边距 */
+            }
+        </style>
+        <div style="overflow-x: auto ; width: 100%; ">
+            <table class="layui-table" id="first_table" style="width: 120%;">
                 <thead>
-                <tr>
-                    <th style="text-align: center">炉号</th>
-                    <th style="text-align: center;display:none;">批号</th>
-                    <th style="text-align: center;display:none;">钢板号</th>
-                    <th style="text-align: center">验收标准</th>
-                    <th style="text-align: center">材质</th>
-                    <th style="text-align: center">规格δ</th>
-                    <th style="text-align: center">样品状态</th>
+                <tr style="height: 40px;">
+                    <th style="text-align: center;width: 8%;">炉号</th>
+                    <th style="text-align: center;width: 8%;display:none;">批号</th>
+                    <th style="text-align: center;width: 8%;display:none;">钢板号</th>
+                    <th style="text-align: center;width: 8%;display:none;">Z向性能</th>
+                    <th style="text-align: center;width: 12%;">验收标准</th>
+                    <th style="text-align: center;width: 8%;">材质</th>
+                    <th style="text-align: center;width: 80px;">规格δ</th>
+                    <th style="text-align: center;width: 120px;">样品状态</th>
+                    <th style="text-align: center;width: 100px;">生产厂家</th>
+                    <th style="text-align: center;width: 100px;">受样日期</th>
+                    <th style="text-align: center;width: 100px;">理化日期</th>
+                    <th style="text-align: center;width: 100px;">化学日期</th>
+                    <th style="text-align: center;width: 100px;">报告日期</th>
                 </tr>
                 </thead>
                 <tbody id="tableBody">
                 </tbody>
             </table>
         </div>
+
+        </div>
+
         <div class="layui-form-item">
             <div class="layui-inline">
                 <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
@@ -169,16 +165,17 @@
     <script src={% static 'jquery-3.7.1.min.js' %}></script>
     <script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
     <script>
-        layui.use(['form', 'laydate', 'util'], function () {
+        layui.use(['form', 'laydate', 'util', 'table'], function () {
             var form = layui.form;
             var layer = layui.layer;
             var laydate = layui.laydate;
+            var table = layui.table;
             // 验证规则
 
             // checkbox 炉批号钢板号  选择
-            form.on('checkbox(lh)', form_row_set);
-            form.on('checkbox(ph)', form_row_set);
-            form.on('checkbox(gbh)', form_row_set);
+            form.on('checkbox(lh)', addRows);
+            form.on('checkbox(ph)', addRows);
+            form.on('checkbox(gbh)', addRows);
             // Z 向性能开关
             form.on('switch(switchTest)', function (data) {
                 if (data.elem.checked) {
@@ -187,17 +184,19 @@
                     $('#z_status').hide();
                 }
             });
-            form.on('checkbox(checkboxFilter)', function (data) {
-                if (data.elem.checked) {
-                    $('#jl').show();
-                } else {
-                    $('#jl').hide();
-                }
+            form.on('checkbox(jl)', function (data) {
+                $("#jl1")[data.elem.checked ? 'show' : 'hide']();
+                $("#jl2")[data.elem.checked ? 'show' : 'hide']();
+                $("[name='jl_c_text']")[data.elem.checked ? 'show' : 'hide']();
+                $("[name='jl_r_text']")[data.elem.checked ? 'show' : 'hide']();
             });
-            // 日期
-            laydate.render({
-                elem: '#date'
+            form.on('checkbox(qy)', function (data) {
+                $("#qy1")[data.elem.checked ? 'show' : 'hide']();
+                $("#qy2")[data.elem.checked ? 'show' : 'hide']();
+                $("[name='qy_c_text']")[data.elem.checked ? 'show' : 'hide']();
+                $("[name='qy_r_text']")[data.elem.checked ? 'show' : 'hide']();
             });
+
             form.render();
             // 提交事件
             form.on('submit(formDemo)', function (data) {
@@ -207,7 +206,7 @@
                 var str_res = ""; // 转换为 JSON 字符串
                 for (var i in field)
                     str_res += i + ":" + field[i] + "<br>";
-                layer.alert(str_res, {
+                layer.alert(field, {
                     title: '当前填写的字段值'
                 }, function () {
                 });
@@ -215,7 +214,79 @@
             });
 
             // 增减行操作
-            form.on('input-affix(rowCountInput)', form_row_set);
+            form.on('input-affix(rowCountInput)', addRows);
+
+            // 动态添加行函数
+            function addRows() {
+                const rowCount = parseInt(document.getElementById('rowCountInput').value);
+                // 验证输入有效性
+                if (isNaN(rowCount)) {
+                    layer.msg('请输入有效的数字');
+                    return;
+                }
+                const tbody = document.querySelector('#first_table tbody');
+                let html = '';
+                // 生成行HTML
+                for (let i = 0; i < rowCount; i++) {
+                    var checkbox1 = document.getElementsByName('raw_no_type')[0];
+                    var checkbox2 = document.getElementsByName('raw_no_type')[1];
+                    var checkbox3 = document.getElementsByName('raw_no_type')[2];
+                    var firstTable = document.getElementById('first_table');
+                    if (checkbox1.checked) {
+                        html += `
+                    <tr><td><input type="text" class="layui-input" name="lh" placeholder="没有就填 ‘/’"></td> {# 炉号 #}`;
+                    }
+                    if (checkbox2.checked) {
+                        html += `
+                        <td><input type="text" class="layui-input" name="ph" placeholder="没有就填 ‘/’"></td> {# 批号 #}`;
+                    }
+                    if (checkbox3.checked) {
+                        html += `
+                        <td><input type="text" class="layui-input" name="gbh" placeholder="没有就填 ‘/’"></td> {# 钢板号 #}`;
+                    }
+
+                    html += `
+                        <td>
+                            <td><input type="text" class="layui-input" name="gbh" placeholder="没有就填 ‘/’"></td> {# Z 向性能 #}
+                        <td>
+                            <select name="standard" lay-verify="required" lay-search>
+                                <option value="GB/T 714-2015" selected>GB/T 714-2015</option>
+                                <option value="GB/T 1591-2018">GB/T 1591-2018</option>
+                                <option value="GB/T 700-2006">GB/T 700-2006</option>
+                                <option value="GB/T 712-2011">GB/T 712-2011</option>
+                                <option value="TB/T 3556-2020">TB/T 3556-2020</option>
+                            </select>
+                        </td> {# 验收标准 #}
+                        <td><input type="text" class="layui-input" name="material" lay-verify="required"
+                                   placeholder="Q345qD"></td> {# 材质 #}
+                        <td><input type="number" lay-affix="number" class="layui-input" name="thickness"
+                                   lay-verify="required" placeholder="δ/t=20mm"></td> {# 板厚 #}
+                        <td>
+                            <select name="status" lay-verify="required" lay-search>
+                                <option value="TMCP" selected>TMCP(热机械轧制)</option>
+                                <option value="AR">AR(热轧)</option>
+                                <option value="N">N(正火)</option>
+                                <option value="NH">NH(耐腐蚀)</option>
+                                <option value="T">T(回火)</option>
+                                <option value="NR">NR(正火轧制)</option>
+                                <option value="QT">QT(淬火加回火[调质])</option>
+                                <option value="NT">NT(正火加回火)</option>
+                                <option value="A">A(退火)</option>
+                                <option value="CR">CR(冷轧)</option>
+                            </select>
+                        </td> {# 样品状态 #}
+                        <td><input type="text" class="layui-input" name="manufacturer" placeholder="生产厂家"></td> {# 生产厂家 #}
+                        <td><input type="text" class="layui-input" name="come_date" placeholder="受样日期"></td> {# 受样日期 #}
+                        <td><input type="text" class="layui-input" name="detect_date_lh" placeholder="理化日期"></td> {# 理化日期 #}
+                        <td><input type="text" class="layui-input" name="detect_date_hx" placeholder="化学日期"></td> {# 化学日期 #}
+                        <td><input type="text" class="layui-input" name="report_date" placeholder="报告日期"></td> {# 报告日期 #}
+                    </tr>`;
+                    tbody.innerHTML = html;
+
+                    form.render();
+                }
+
+            }
 
             // 根据 checkbox 状态及行数 重绘表格
             function form_row_set() {
@@ -229,12 +300,13 @@
                     // 炉号
                     var input4Cell = document.createElement('td');
                     var input4 = document.createElement('input');
-                    var checkbox = document.getElementsByName('raw_no_type')[0];
-                    if (checkbox.checked) {
+                    var checkbox1 = document.getElementsByName('raw_no_type')[0];
+                    if (checkbox1.checked) {
                         input4.style.display = "";
                         input4.setAttribute("name", "lh")
                         input4.classList.add('layui-input');
                         input4.setAttribute('type', 'text');
+                        input4.setAttribute('placeholder', '没有就填  ‘/’');
                         input4Cell.appendChild(input4);
                         cells.push(input4Cell);
                         firstTable.rows[0].cells[0].style.display = "";
@@ -244,12 +316,13 @@
                     // 批号
                     var input5Cell = document.createElement('td');
                     var input5 = document.createElement('input');
-                    var checkbox = document.getElementsByName('raw_no_type')[1];
-                    if (checkbox.checked) {
+                    var checkbox2 = document.getElementsByName('raw_no_type')[1];
+                    if (checkbox2.checked) {
                         input5.style.display = "";
                         input5.setAttribute("name", "ph")
                         input5.classList.add('layui-input');
                         input5.setAttribute('type', 'text');
+                        input5.setAttribute('value', '/');
                         input5Cell.appendChild(input5);
                         cells.push(input5Cell);
                         firstTable.rows[0].cells[1].style.display = "";
@@ -259,12 +332,13 @@
                     // 钢板号
                     var input6Cell = document.createElement('td');
                     var input6 = document.createElement('input');
-                    var checkbox = document.getElementsByName('raw_no_type')[2];
-                    if (checkbox.checked) {
+                    var checkbox3 = document.getElementsByName('raw_no_type')[2];
+                    if (checkbox3.checked) {
                         input6.style.display = "";
                         input6.setAttribute("name", "gbh");
                         input6.classList.add('layui-input');
                         input6.setAttribute('type', 'text');
+                        input6.setAttribute('value', '/');
                         input6Cell.appendChild(input6);
                         cells.push(input6Cell);
                         firstTable.rows[0].cells[2].style.display = "";
@@ -275,14 +349,22 @@
                     const select1Cell = document.createElement('td');
                     const select1 = document.createElement('select');
                     select1.classList.add('layui-select');
-                    select1.innerHTML = `
-                        <option value="GB/T 714-2015" name="standard" selected>GB/T 714-2015</option>
-                        <option value="GB/T 1591-2018">GB/T 1591-2018</option>
-                        <option value="GB/T 700-2006">GB/T 700-2006</option>
-                        <option value="GB/T 700-2006">GB/T 700-2006</option>
-                        <option value="GB/T 712-2011">GB/T 712-2011</option>
-                        <option value="TB/T 3556-2020">TB/T 3556-2020</option>
-                    `;
+                    select1.setAttribute('lay-verify', 'required');
+                    select1.setAttribute('name', "standard");
+                    const options1 = [
+                        {value: "GB/T 714-2015", text: "GB/T 714-2015", selected: true},
+                        {value: "GB/T 1591-2018", text: "GB/T 1591-2018"},
+                        {value: "GB/T 700-2006", text: "GB/T 700-2006"},
+                        {value: "GB/T 712-2011", text: "GB/T 712-2011"},
+                        {value: "TB/T 3556-2020", text: "TB/T 3556-2020"},
+                    ];
+                    options1.forEach(option => {
+                        var optionElement = document.createElement('option');
+                        optionElement.setAttribute('value', option.value);
+                        optionElement.textContent = option.text;
+                        if (option.selected) optionElement.setAttribute('selected', 'true');
+                        select1.appendChild(optionElement);
+                    });
                     select1Cell.appendChild(select1);
                     cells.push(select1Cell);
 
@@ -292,9 +374,11 @@
                     input1.classList.add('layui-input');
                     input1.setAttribute('type', 'text');
                     input1.setAttribute('name', 'material');
+                    input1.setAttribute('value', 'Q345qD');
+                    input1.setAttribute('lay-verify', 'required');
                     input1.addEventListener('change', function () {
                         var validValues = ["Q345qC", "Q345qD", "Q345qE", "Q355qC", "Q355qD", "Q355qE", "Q370qC", "Q370qD", "Q370qE", "Q355qE",
-                            "Q420qC", "Q420qD", "Q420qE", "Q355NC", "Q355ND", "Q355NE"];
+                            "Q420qC", "Q420qD", "Q420qE ", "Q355NC", "Q355ND", "Q355NE"];
                         if (!validValues.includes(this.value)) {
                             alert("请输入正确的材质,注意大小写" + this.value);
                             this.value = "";
@@ -305,16 +389,18 @@
                     // 板厚
                     var input2Cell = document.createElement('td');
                     var input2 = document.createElement('input');
-                    input2.setAttribute("name", "thickness ")
+                    input2.setAttribute("name", "thickness");
                     input2.classList.add('layui-input');
                     input2.setAttribute('type', 'text');
-                    input2.setAttribute('placeholder', '如：δ=20mm');
+                    input2.setAttribute('lay-verify', 'required');
+                    input2.setAttribute('placeholder', 'δ/t=20mm');
                     input2Cell.appendChild(input2);
                     cells.push(input2Cell);
                     // 样品状态
                     var select2Cell = document.createElement('td');
                     var select2 = document.createElement('select');
                     select2.classList.add('layui-select');
+                    select2.setAttribute('lay-verify', 'required');
                     select2.setAttribute('name', "status");
                     const options = [
                         {value: 'TMCP', text: 'TMCP(热机械轧制)', selected: true},
@@ -337,17 +423,77 @@
                     });
                     select2Cell.appendChild(select2);
                     cells.push(select2Cell);
+                    // 生产厂家
+                    var input3Cell = document.createElement('td');
+                    var input3 = document.createElement('input');
+                    input3.classList.add('layui-input');
+                    input3.setAttribute("name", "manufacturer")
+                    input3.setAttribute('type', 'text');
+                    input3.setAttribute('lay-verify', 'required');
+                    input3.setAttribute('placeholder', '没有就填  ‘/’');
+                    input3Cell.appendChild(input3);
+                    cells.push(input3Cell);
+                    // 受样日期
+                    var input7Cell = document.createElement('td');
+                    var input7 = document.createElement('input');
+                    input7.setAttribute('type', 'text');
+                    input7.setAttribute("name", "come_date");
+                    input7.setAttribute('value', '/');
+                    input7.classList.add('layui-input');
+                    input7.classList.add('come-date');
+                    input7Cell.appendChild(input7);
+                    cells.push(input7Cell);
+                    // 理化日期
+                    var input9Cell = document.createElement('td');
+                    var input9 = document.createElement('input');
+                    input9.setAttribute('type', 'text');
+                    input9.setAttribute("name", "detect_date_lh");
+                    input9.setAttribute('value', '/');
+                    input9.classList.add('layui-input');
+                    input9.classList.add('come-date');
+                    input9Cell.appendChild(input9);
+                    cells.push(input9Cell);
+                    // 化学日期
+                    var input10Cell = document.createElement('td');
+                    var input10 = document.createElement('input');
+                    input10.setAttribute('type', 'text');
+                    input10.setAttribute("name", "detect_date_hx");
+                    input10.setAttribute('value', '/');
+                    input10.classList.add('layui-input');
+                    input10.classList.add('come-date');
+                    input10Cell.appendChild(input10);
+                    cells.push(input10Cell);
+                    // 报告日期
+                    var input8Cell = document.createElement('td');
+                    var input8 = document.createElement('input');
+                    input8.setAttribute('type', 'text');
+                    input8.setAttribute("name", "report_date")
+                    input8.setAttribute('value', '/');
+                    input8.classList.add('layui-input');
+                    input8.classList.add('report-date');
+                    input8Cell.appendChild(input8);
+                    cells.push(input8Cell);
+
                     cells.forEach(cell => row.appendChild(cell));
                     tableBody.appendChild(row);
+                    // 日期渲染
+                    laydate.render({
+                        elem: '.report-date',
+                        format: 'yyyy-MM-dd'
+                    });
+                    laydate.render({
+                        elem: '.come-date',
+                        format: 'yyyy.MM.dd'
+                    });
                 }
                 form.render('select');
             }
 
             $(document).ready(function () {
                 // 初始化执行
+                addRows();
             });
         });
-
     </script>
 
 {% endblock %}

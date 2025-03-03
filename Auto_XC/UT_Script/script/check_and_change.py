@@ -39,3 +39,15 @@ def check_and_change(document, replace_dict):
             for cell in row.cells:
                 same_check(cell.paragraphs, replace_dict)
     return document
+
+
+def replace_header_text(document, old_text, new_text):
+    # 遍历文档中的每个节（section）
+    for section in document.sections:
+        header = section.header  # 获取当前节的页眉
+        for paragraph in header.paragraphs:
+            if old_text in paragraph.text:
+                # 替换文本
+                inline_shapes = paragraph.runs
+                for run in inline_shapes:
+                    run.text = run.text.replace(old_text, new_text)

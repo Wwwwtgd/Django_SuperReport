@@ -23,11 +23,10 @@ def replace_the_dict(books1, replace_dict):
     replace_dict["这是表面补偿"] = books1["表面补偿"][0]
     replace_dict["这是对比试块"] = books1["对比试块"][0]
     replace_dict["这是标准试块"] = books1["标准试块"][0]
-    replace_dict["这是检测位置"] = books1["检测位置"][0]
-    replace_dict["这是扫查方式"] = books1["扫查方式"][0]
+    # replace_dict["这是检测位置"] = books1["检测位置"][0]
+    # replace_dict["这是扫查方式"] = books1["扫查方式"][0]
     replace_dict["这是检测灵敏度"] = books1["检测灵敏度"][0]
     replace_dict["这是检验标准"] = books1["检验标准"][0]
-    replace_dict["这是验收标准"] = books1["验收标准"][0]
     replace_dict["这是母材检测结果"] = books1["母材检测结果"][0]
 
 

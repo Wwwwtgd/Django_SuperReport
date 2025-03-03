@@ -15,10 +15,10 @@
 {% block content %}
     {% csrf_token %}
     <hr>
-    <h3>1、请下载模板表格，填写相关信息后，上传到本网站。</h3>
+    <h3>1、请下载超声模板表格，填写相关信息后，上传到本网站。</h3>
     <br>
     <div class="layui-btn-container">
-        <a href="{% url 'download_base_excel' %}" class="layui-btn">下载模板</a>
+        <a href="{% url 'download_ut_base_excel' %}" class="layui-btn">下载模板</a>
     </div>
     <hr>
     <h3>2、请上传示意图。</h3>
@@ -46,7 +46,7 @@
     <h3>4、等待报告生成完毕，请点击“下载报告”按钮，下载报告。</h3>
     <br>
     <div class="layui-btn-container">
-        <a href="{% url 'download_report' %}" class="layui-btn" id="ID-download-report"
+        <a href="{% url 'download_ut_report' %}" class="layui-btn" id="ID-download-report"
            style="display: none;">下载报告</a>
     </div>
 
@@ -80,8 +80,7 @@
                 },
                 done: function (res) {
                     $('#ID-download-report').show();
-                    layer.msg('上传成功，正在处理');
-                    console.log(res);
+                    layer.msg('生成报告成功，请点击下载报告按钮下载');
                 },
                 error: function () {
                     layer.msg('上传失败，请重试');
@@ -101,7 +100,7 @@
             // 单图片上传
             var uploadInst = upload.render({
                 elem: '#ID-upload-demo-btn',
-                url: '{% url 'update_picture' %}', // 实际使用时改成您自己的上传接口即可。
+                url: '{% url 'update_ut_picture' %}', // 实际使用时改成您自己的上传接口即可。
                 headers: {
                     'X-CSRFToken': csrfToken  // 添加 CSRF Token
                 },

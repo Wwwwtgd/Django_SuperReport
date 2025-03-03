@@ -7,9 +7,10 @@ from django.core.files.storage import FileSystemStorage
 from .script.autoEdit_UT import auto_edit_ut
 PATH_template = os.getcwd() + r'/Auto_XC/UT_Script/report_template/'
 PATH_result = os.getcwd() + r'/Auto_XC/UT_Script/report_result/'
+result_path = PATH_result
 
 
-def download_base_excel(request):
+def download_ut_base_excel(request):
     file_path = PATH_template + 'A_UT模板.xlsx'
     if os.path.exists(file_path):
         with open(file_path, 'rb') as file:
@@ -21,15 +22,15 @@ def download_base_excel(request):
         return HttpResponse('File not found.', status=404)
 
 
-def download_report(request):
+def download_ut_report(request):
     # 设置文件夹路径
-    folder_path = PATH_result
+    folder_path = result_path
     zip_buffer = BytesIO()
     # 创建一个 Zip 文件
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        for foldername, subfolders, filenames in os.walk(folder_path):
+        for folder_name, sub_folders, filenames in os.walk(folder_path):
             for filename in filenames:
-                file_path = os.path.join(foldername, filename)
+                file_path = os.path.join(folder_name, filename)
                 zip_file.write(file_path, os.path.relpath(file_path, folder_path))
     # 设置响应头，告知浏览器是文件下载
     zip_buffer.seek(0)
@@ -43,19 +44,20 @@ def get_ut_list(request):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         fs = FileSystemStorage(location=PATH_template)
-        # 如果文件已经存在，删除旧文件
-        if os.path.exists(PATH_template + uploaded_file.name):
-            os.remove(PATH_template + uploaded_file.name)
-        filename = fs.save(uploaded_file.name, uploaded_file)
-        file_url = fs.url(filename)  # 返回文件的 URL
+        # 如果文件已经存在，删除旧文件  原文件名：PATH_template + uploaded_file.name
+        if os.path.exists(PATH_template + "ut_now.xlsx"):
+            os.remove(PATH_template + "ut_now.xlsx")
+        filename = fs.save("ut_now.xlsx", uploaded_file)
+        fs.url(filename)  # 返回文件的 URL
         excel_path = os.path.join(PATH_template, filename)
-        auto_edit_ut(excel_path)  # 调用自动化脚本进行处理
-        return JsonResponse({'status': 'success', 'msg': '生成报告成功', 'url': file_url})
+        global result_path
+        result_path = auto_edit_ut(excel_path)  # 调用自动化脚本进行处理
+        return JsonResponse({'status': 'success', 'msg': '生成报告成功'})
     return JsonResponse({'status': 'error', 'msg': '上传/生成报告失败'}, status=400)
 
 
 @csrf_protect  # 确保启用 CSRF 防护
-def update_picture(request):
+def update_ut_picture(request):
     if request.method == 'POST' and request.FILES.get('file'):
         # 获取上传的文件
         file = request.FILES['file']

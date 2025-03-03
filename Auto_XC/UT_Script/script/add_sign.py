@@ -30,5 +30,5 @@ def add_syt(doc, src):
                         # 表格中要先水平垂直居中，然后再添加图片
                         paragraph.text = paragraph.text.replace("这是示意图", "")
                         run = paragraph.add_run()
-                        run.add_picture(src, height=Cm(5.61), width=None)
+                        run.add_picture(src, height=Cm(5.61), width=Cm(16.2))
     return doc

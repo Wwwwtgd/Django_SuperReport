@@ -1,0 +1,4 @@
+/* 修改 layui 表格的单元格内边距 */
+.layui-table td, .layui-table th {
+    padding: 5px 5px !important; /* 调整上下和左右的内边距 */
+}

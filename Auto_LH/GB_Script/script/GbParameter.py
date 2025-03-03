@@ -1,23 +1,29 @@
 class GbParameter:
     def __init__(self, report_no="", sz_no="", lh="", ph="", gbh="", standard_no="", material="", thickness="", 
-                 status="", z_status="", r_el_or_ul="", rm_value="", rm_limit="", re_value="", re_limit="", 
-                 a_value="", a_limit="", bend_value="", bend_limit="", impact_value="", impact_limit="", c_value="", 
-                 c_limit="", si_value="", si_limit="", mn_value="", mn_limit="", p_value="", p_limit="", s_value="", 
-                 s_limit="", nb_value="", nb_limit="", v_value="", v_limit="", ti_value="", ti_limit="", al_value="", 
-                 al_limit="", cr_value="", cr_limit="", ni_value="", ni_limit="", cu_value="", cu_limit="", mo_value="", 
-                 mo_limit="", n_value="", n_limit=""):
+                 status="", manufacturer="", come_date="", detect_date_lh="", detect_date_hx="", report_date="",
+                 r_el_or_ul="", rm_value="", rm_limit="", re_value="", z_value="", z_limit="",
+                 re_limit="", a_value="", a_limit="", bend_value="", impact_value="", impact_limit="",
+                 c_value="", c_limit="", si_value="", si_limit="", mn_value="", mn_limit="", p_value="", p_limit="",
+                 s_value="", s_limit="", nb_value="", nb_limit="", v_value="", v_limit="", ti_value="", ti_limit="",
+                 al_value="", al_limit="", cr_value="", cr_limit="", ni_value="", ni_limit="", cu_value="", cu_limit="",
+                 mo_value="", mo_limit="", n_value="", n_limit=""):
         # 初始化所有字段
         self.report_no = report_no  # 报告控制编号
         self.sz_no = sz_no  # 样品编号
+
         self.lh = lh  # 炉号
         self.ph = ph  # 批号
         self.gbh = gbh  # 钢板号
         self.standard_no = standard_no  # 标准号
         self.material = material  # 材料
-        self.thickness = thickness  # 厚度
+        self.thickness = thickness  # 规格
         self.status = status  # 样品状态
+        self.manufacturer = manufacturer  # 生产厂家
+        self.come_date = come_date  # 到样日期
+        self.detect_date_lh = detect_date_lh  # 理化检测日期
+        self.detect_date_hx = detect_date_hx  # 化学检测日期
+        self.report_date = report_date  # 报告日期
 
-        self.z_status = z_status  # Z 向状态
         self.r_el_or_ul = r_el_or_ul  # 上屈服或下屈服
         self.rm_value = rm_value  # 抗拉强度
         self.rm_limit = rm_limit  # 抗拉强度限值
@@ -25,8 +31,9 @@ class GbParameter:
         self.re_limit = re_limit  # 屈服强度限值
         self.a_value = a_value  # 伸长率
         self.a_limit = a_limit  # 伸长率限值
+        self.z_value = z_value  # 张拉强度
+        self.z_limit = z_limit  # 张拉强度限值
         self.bend_value = bend_value  # 弯曲结果
-        self.bend_limit = bend_limit  # 弯曲结果要求
         self.impact_value = impact_value  # 钢板材料冲击强度
         self.impact_limit = impact_limit  # 钢板材料冲击强度限值
         self.c_value = c_value  # 钢板材料 C 值
