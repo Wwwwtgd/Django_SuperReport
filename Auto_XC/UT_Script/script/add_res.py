@@ -51,7 +51,7 @@ def add_res(doc_main, second_page, b_no, group_main):
 def add_line(doc, content, word):
     for table in doc.tables:
         # 遍历表格中的行
-        for row in table.rows:
+        for row in reversed(table.rows):
             if content in [cell.text for cell in row.cells]:
                 for i in range(len(word)):
                     cell = row.cells[i + 1]
@@ -69,6 +69,7 @@ def add_line(doc, content, word):
                         run = paragraph.add_run(str(word[i]))
                     run.font.name = 'Times New Roman'  # 设置字体为 Times New Roman
                     run.font.size = Pt(9)  # 设置字体大小为文档默认字体大小
+                break
 
 
 def convert_to_int(word):

@@ -16,7 +16,7 @@ def download_mt_base_excel(request):
         with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(),
                                     content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename="mt_list.xlsx"'  # 设置下载文件的名称
+            response['Content-Disposition'] = 'attachment; filename="MT_list.xlsx"'  # 设置下载文件的名称
             return response
     else:
         return HttpResponse('File not found.', status=404)

@@ -23,8 +23,8 @@ def process_report(params):
     qx_num = (group['结论'] == '不合格').sum()
     print(f'报告编号：{no:<10}' f'构件名称: {component:<10}'f'焊缝类型: {weld:<10}'f'len: {len(group):<10}'
           f'总长度: {total_length:<10}'f'组：{g:<10}'f'不合格数量：{qx_num:<10}')
-    save_path = res_path + "/" + str(b_no[-6:]) + ".docx"  # 保存路径
-    save_path_retest = res_path + "/" + str(b_no[-6:]) + "-1.docx"  # 保存路径
+    save_path = res_path + "/" + str(b_no[-6:]) + " " + component + ".docx"  # 保存路径
+    save_path_retest = res_path + "/" + str(b_no[-6:]) + " " + component + "-1.docx"  # 保存路径
     # 设置验收标准
     if weld == "对接焊缝":
         takeover_standard = bk1["全熔透验收标准"][0]  # 设置验收标准
@@ -39,9 +39,9 @@ def process_report(params):
         detect_location = "单侧双面"  # 设置检测位置
         detect_method = "L+N+T"  # 设置检测方法
     else:
-        takeover_standard = ""  # 设置验收标准
-        detect_location = " "  # 设置检测位置
-        detect_method = " "  # 设置检测方法
+        takeover_standard = bk1["全熔透验收标准"][0]  # 设置验收标准
+        detect_location = "单侧双面"  # 设置检测位置
+        detect_method = "L+N+T"  # 设置检测方法
         print(Fore.RED + f"{weld}焊缝类型暂不支持验收标准")
     replace_eve_dict = {
         "这是构件名称": component, "这是检测部位": weld, "这是检测数量": total_length, "报告的日期": final_date,  # 替换字典
@@ -70,15 +70,20 @@ def process_report(params):
             qxx = row["X（mm）"]
             qxl = row["L（mm）"]
             l_all = row["检测总长度(m)"] * 1000
-            if 50 <= qxx <= l_all - qxl - 50:
+
+            if 50 <= qxx <= l_all - qxl - 50:  # 两边都够
                 bw = str(round((qxx - 50) / 1000, 2)) + "~" + str(round((qxx + qxl + 50) / 1000, 2))
                 zc = str(round((qxl + 100) / 1000, 2))
-            elif qxx <= 50:
+            elif qxx < 50 and qxx <= l_all - qxl - 50:  # 左边不够
                 bw = "0~" + str(round((qxx + qxl + 50) / 1000, 2))
                 zc = str(round((qxl + 50 + qxx) / 1000, 2))
-            else:
+            elif qxx >=50 and qxx > l_all - qxl - 50:  # 右边不够
                 bw = str(round((qxx - 50) / 1000, 2)) + "~" + str(round(l_all / 1000, 2))
                 zc = str(round((l_all - qxx + 50)/1000, 2))
+            else:
+                bw = "0~" + str(round((l_all) / 1000, 2))
+                zc = str(round((l_all - qxx + 50) / 1000, 2))
+
             all_long += float(zc)
             dict_word = [
                 row["焊缝编号"], row["板厚(mm)"], bw, zc,
