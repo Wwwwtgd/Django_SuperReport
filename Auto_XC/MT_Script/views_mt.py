@@ -45,13 +45,14 @@ def get_mt_list(request):
         uploaded_file = request.FILES['file']
         fs = FileSystemStorage(location=PATH_template)
         # 如果文件已经存在，删除旧文件  原文件名：PATH_template + uploaded_file.name
-        if os.path.exists(PATH_template + "mt_now.xlsx"):
-            os.remove(PATH_template + "mt_now.xlsx")
-        filename = fs.save("mt_now.xlsx", uploaded_file)
+        if os.path.exists(PATH_template + "mt_list.xlsx"):
+            os.remove(PATH_template + "mt_list.xlsx")
+        filename = fs.save("mt_list.xlsx", uploaded_file)
         fs.url(filename)  # 返回文件的 URL
         excel_path = os.path.join(PATH_template, filename)
+        report_type = request.session.get('selected_report_type')
         global result_path
-        result_path = auto_edit_mt(excel_path)  # 调用自动化脚本进行处理
+        result_path = auto_edit_mt(excel_path, report_type)  # 调用自动化脚本进行处理
         return JsonResponse({'status': 'success', 'msg': '生成报告成功'})
     return JsonResponse({'status': 'error', 'msg': '上传/生成报告失败'}, status=400)
 
@@ -78,3 +79,12 @@ def update_mt_picture(request):
             }
         })
     return JsonResponse({'code': 1, 'msg': '上传失败'})
+
+
+@csrf_protect  # 确保启用 CSRF 防护
+def handle_mt_report_type(request):
+    if request.method == 'POST':
+        report_type = request.POST.get('report_type')
+        request.session['selected_report_type'] = report_type
+    return JsonResponse({'status': 'success', 'msg': '成功'})
+

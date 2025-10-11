@@ -18,13 +18,13 @@ def add_res(doc_main, second_page, b_no, group_main):
                 row["焊缝编号"],
                 row["板厚(mm)"],
                 row["检测部位(m)"],
-                row["检测总长度(m)"],
+                format_number(row["检测总长度(m)"]),
                 row["缺陷编号"],
                 row["缺陷当量（dB）"],
                 convert_to_int(row["L（mm）"]),
-                convert_to_int(row["X（mm）"]),
-                convert_to_int(row["Y（mm）"]),
-                convert_to_int(row["H（mm）"]),
+                format_number(row["X（mm）"]),
+                format_number(row["Y（mm）"]),
+                format_number(row["H（mm）"]),
                 row["结论"],
             ]  # 每行数据
             # date = str(row["检测日期"].strftime("%Y.%m.%d"))  # 检测日期
@@ -73,7 +73,24 @@ def add_line(doc, content, word):
 
 
 def convert_to_int(word):
+    if str(word) == "nan":
+        return "/"
     try:
         return int(word)
     except ValueError:
         return word
+
+
+def format_number(num):
+    if '~' in str(num) or '+' in str(num) or '-' in str(num):
+        return str(num)
+    if str(num) == "nan":
+        return "/"
+    if num > 26 or num <=0:
+        if isinstance(num, int) or (isinstance(num, float) and num % 1 == 0):
+            return int(num)
+        return "{0:.1f}".format(num)  # 整数保留一位小数
+    else:
+        # 去除小数部分多余的0
+        formatted = "{0:.10f}".format(num).rstrip('0').rstrip('.') if '.' in "{0:.10f}".format(num) else str(num)
+        return formatted if '.' in formatted else formatted + '.0'  # 确保整数情况已被处理

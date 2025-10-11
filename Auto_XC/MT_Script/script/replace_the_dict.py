@@ -9,7 +9,11 @@ def replace_the_dict(books1, replace_dict):
     replace_dict["这是反差剂"] = books1["反差增强剂"][0]
     replace_dict["这是检测时机"] = books1["检测时机"][0]
     replace_dict["这是磁悬液"] = books1["磁悬液类型"][0]
-    replace_dict["这是检测比例"] = books1["检测比例"][0]
+    if type(books1["检测比例"][0]) == str:
+        replace_dict["这是检测比例"] = books1["检测比例"][0]
+    else:
+        bl = books1["检测比例"][0]
+        replace_dict["这是检测比例"] = f"{bl:.0%}"
     replace_dict["这是仪器型号"] = books1["仪器型号/编号"][0]
     replace_dict["这是施加方法"] = books1["施加方法"][0]
     replace_dict["这是磁化电流"] = books1["磁化电流/提升力"][0]

@@ -17,11 +17,11 @@ def add_res(doc_main, second_page, b_no, group_main):
             dict_word = [
                 row["焊缝编号"],
                 row["检测部位(m)"],
-                row["检测总长度(m)"],
+                format_number(row["检测总长度(m)"]),
                 row["缺陷编号"],
                 row["缺陷性质"],
-                convert_to_int(row["X(mm)"]),
-                row["缺陷尺寸(mm)"],
+                format_number(row["X(mm)"]),
+                convert_to_int(row["缺陷尺寸(mm)"]),
                 row["结论"],
             ]  # 每行数据
             # date = str(row["检测日期"].strftime("%Y.%m.%d"))  # 检测日期
@@ -50,7 +50,6 @@ def add_line(doc, content, word):
         for row in reversed(table.rows):
             if content in [cell.text for cell in row.cells]:
                 for i in range(len(word)):
-                    print(row.cells[0].text)
                     cell = row.cells[i + 1]
                     # 清空单元格中的所有段落内容
                     for paragraph in cell.paragraphs:
@@ -70,7 +69,22 @@ def add_line(doc, content, word):
 
 
 def convert_to_int(word):
+    if str(word) == "nan" or str(word) == "/":
+        return "/"
     try:
         return int(word)
     except ValueError:
         return word
+
+
+def format_number(num):
+    if str(num) == "nan" or str(num) == "/":
+        return "/"
+    if num > 26 or num <=0:
+        if isinstance(num, int) or (isinstance(num, float) and num % 1 == 0):
+            return int(num)
+        return "{0:.1f}".format(num)  # 整数保留一位小数
+    else:
+        # 去除小数部分多余的0
+        formatted = "{0:.10f}".format(num).rstrip('0').rstrip('.') if '.' in "{0:.10f}".format(num) else str(num)
+        return formatted if '.' in formatted else formatted + '.0'  # 确保整数情况已被处理

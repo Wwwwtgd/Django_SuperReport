@@ -49,5 +49,4 @@ def replace_header_text(document, old_text, new_text):
             if old_text in paragraph.text:
                 # 替换文本
                 inline_shapes = paragraph.runs
-                for run in inline_shapes:
-                    run.text = run.text.replace(old_text, new_text)
+                inline_shapes[2].text = inline_shapes[2].text.replace(old_text, new_text)

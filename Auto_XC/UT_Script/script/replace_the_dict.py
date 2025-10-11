@@ -9,11 +9,15 @@ def replace_the_dict(books1, replace_dict):
     # replace_dict["这是检测部位"] = books1['检测部位'][0]
     # replace_dict["这是监理单位"] = books1['监理单位'][0]
     replace_dict["这是材质"] = books1["材质"][0]
-    replace_dict["这是坡口形式"] = books1["坡口形式"][0]
+    # replace_dict["这是坡口形式"] = books1["坡口形式"][0]
     # replace_dict["这是检测数量"] = books1['检测数量'][0]
     replace_dict["这是检测时机"] = books1["检测时机"][0]
     replace_dict["这是焊接方式"] = books1["焊接方式"][0]
-    replace_dict["这是检测比例"] = books1["检测比例"][0]
+    if type(books1["检测比例"][0]) == str:
+        replace_dict["这是检测比例"] = books1["检测比例"][0]
+    else:
+        bl = books1["检测比例"][0]
+        replace_dict["这是检测比例"] = f"{bl:.0%}"
     replace_dict["这是热处理状态"] = books1["热处理状态"][0]
     replace_dict["这是工件温度"] = books1["工件温度"][0]
     replace_dict["这是表面状态"] = books1["表面状态"][0]

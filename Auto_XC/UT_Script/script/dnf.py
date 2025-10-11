@@ -10,7 +10,7 @@ def dnf(df):
     # 创建新的列来标识分组，初始化
     df['分组编号'] = 0
 
-    # 计算累计的 '检测总长度(m)'，并在累计值达到 150000 时分组
+    # 计算累计的 '检测总长度(m)'，并在累计值达到 150 时分组
     for (component, weld), group in grouped:
         cumulative_length = 0
         group_index = 1  # 初始分组编号
@@ -18,7 +18,7 @@ def dnf(df):
             cumulative_length += row['检测总长度(m)']
 
             # 判断是否超过 150000，超过则切换到新的分组
-            if cumulative_length > 150000:
+            if cumulative_length > 150:
                 group_index += 1
                 cumulative_length = row['检测总长度(m)']  # 重置累计值为当前行的检测长度
 

@@ -36,14 +36,26 @@
         </div>
     </div>
     <hr>
-    <h3>3、请上传填写好的 Excel 文件，文件格式为.xls 或.xlsx，并点击“开始生成”按钮，即可生成报告。</h3>
+    <h3>3、请选择报告类型(必选项)。</h3>
+    <br>
+    <div class="layui-form layui-row layui-col-space16">
+        <div class="layui-col-md6" style="width: 160px;">
+            <select name="report_type" lay-filter="reportType">
+                <option value="">-请选择报告类型-</option>
+                <option value="sz">原视正正常报告</option>
+                <option value="yz">带扬州抬头报告</option>
+            </select>
+        </div>
+    </div>
+    <hr>
+    <h3>4、请上传填写好的 Excel 文件，文件格式为.xls 或.xlsx，并点击“开始生成”按钮，即可生成报告。</h3>
     <br>
     <div class="layui-btn-container">
         <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-choose">选择文件</button>
         <button type="button" class="layui-btn" id="ID-upload-demo-action" lay-on="test-alert">开始生成</button>
     </div>
     <hr>
-    <h3>4、等待报告生成完毕，请点击“下载报告”按钮，下载报告。</h3>
+    <h3>5、等待报告生成完毕，请点击“下载报告”按钮，下载报告。</h3>
     <br>
     <div class="layui-btn-container">
         <a href="{% url 'download_mt_report' %}" class="layui-btn" id="ID-download-report"
@@ -53,6 +65,29 @@
     <script src={% static 'jquery-3.7.1.min.js' %}></script>
     <script src={% static 'layui-v2.9.20/layui/layui.js' %}></script>
     <script>
+        layui.use(['form', 'layer'], function(){
+          var form = layui.form;
+          var layer = layui.layer;
+
+          // 监听选择框变化
+          form.on('select(reportType)', function(data){
+            $.post("{% url 'handle_mt_report_type' %}", {
+              report_type: data.value,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function() {
+                if (data.value == 'yz') {
+                    layer.msg('已选择: ' + "扬州报告模板", {icon: 1});
+                }
+                else if (data.value =='sz') {
+                    layer.msg('已选择: ' + "视正报告模板", {icon: 1});
+                }
+                else {
+                    layer.msg('请选择报告类型', {icon: 2});
+                }
+            });
+          });
+        });
+
         layui.use(function () {
             var layer = layui.layer;
             var upload = layui.upload;

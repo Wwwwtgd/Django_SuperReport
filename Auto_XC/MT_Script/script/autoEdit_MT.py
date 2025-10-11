@@ -1,5 +1,4 @@
-import pandas as pd
-import os
+
 import shutil
 from .add_res import *
 from .add_sign import *
@@ -9,13 +8,26 @@ from docx import Document
 from .replace_the_dict import *
 from multiprocessing import Pool
 from colorama import Fore, init
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 PATH_result = os.getcwd() + r'/Auto_XC/MT_Script/report_result/'
 PATH_TEMPLATE = os.getcwd() + r'/Auto_XC/MT_Script/report_template/'
 init(autoreset=True)
 
 
+def flatten_nested_list(nested_list):
+    result = []
+    for item in nested_list:
+        if isinstance(item[0], list):  # 检查是否是嵌套列表
+            result.extend(flatten_nested_list(item))
+        else:
+            result.append(item)
+    return result
+
+
 def process_report(params):
     no, ((component, weld, g), group), pt_doc, res_page, bk1, res_path = params
+    log_info = []
     document_copy = Document(pt_doc)
     total_length = str(round(group['检测总长度(m)'].sum(), 3))  # 计算总长度
     final_date = group['检测日期'].max().strftime('%Y.%m.%d')
@@ -23,8 +35,8 @@ def process_report(params):
     qx_num = (group['结论'] == '不合格').sum()
     print(f'报告编号：{no:<10}' f'构件名称: {component:<10}'f'焊缝类型: {weld:<10}'f'len: {len(group):<10}'
           f'总长度: {total_length:<10}'f'组：{g:<10}'f'不合格数量：{qx_num:<10}')
-    save_path = res_path + "/" + str(b_no[-6:]) + " " + component + ".docx"  # 保存路径
-    save_path_retest = res_path + "/" + str(b_no[-6:]) + " " + component + "-1.docx"  # 保存路径
+    save_path = res_path + "/" + str(b_no[-6:]) + " " + component.replace("/", "-") + ".docx"  # 保存路径
+    save_path_retest = res_path + "/" + str(b_no[-6:]) + " " + component.replace("/", "-") + "-1.docx"  # 保存路径
     replace_eve_dict = {
         "这是构件名称": component, "这是检测部位": weld, "这是检测数量": total_length, "报告的日期": final_date,  # 替换字典
         "检测的结论": "检测结论合格", "这是报告的编号": b_no
@@ -37,9 +49,9 @@ def process_report(params):
     final_datetime = datetime.datetime.strptime(final_date, '%Y.%m.%d')
     need_replace_time = datetime.datetime.strptime("2024.10.17", '%Y.%m.%d')
     if final_datetime < need_replace_time:  # 日期小于2024.10.17，需要替换公司名称
-        replace_header_text(document, "常州视正检测有限公司", "常州视正钢结构检测有限公司")
+        replace_header_text(document, "视正检测", "视正钢结构检测")
         print(f"{b_no} 日期小于2024.10.17，需要替换公司名称")
-
+    log_info.append(list(map(str, [no, b_no, final_date, component, weld, total_length, "合格"])))
     if qx_num != 0:  # 有不合格缺陷
         document_retest = Document(pt_doc)  # 打开修改后的模板第一页
         unqualified_grouped = group[group['结论'] == '不合格']
@@ -52,17 +64,17 @@ def process_report(params):
             qxl = row["缺陷尺寸(mm)"]
             l_all = row["检测总长度(m)"] * 1000
             if 50 <= qxx <= l_all - qxl - 50:  # 两边都够
-                bw = str(round((qxx - 50) / 1000, 2)) + "~" + str(round((qxx + qxl + 50) / 1000, 2))
-                zc = str(round((qxl + 100) / 1000, 2))
+                bw = str(round((qxx - 50) / 1000, 3)) + "~" + str(round((qxx + qxl + 50) / 1000, 3))
+                zc = str(round((qxl + 100) / 1000, 3))
             elif qxx < 50 and qxx <= l_all - qxl - 50:  # 左边不够
-                bw = "0~" + str(round((qxx + qxl + 50) / 1000, 2))
-                zc = str(round((qxl + 50 + qxx) / 1000, 2))
+                bw = "0~" + str(round((qxx + qxl + 50) / 1000, 3))
+                zc = str(round((qxl + 50 + qxx) / 1000, 3))
             elif qxx >= 50 and qxx > l_all - qxl - 50:  # 右边不够
-                bw = str(round((qxx - 50) / 1000, 2)) + "~" + str(round(l_all / 1000, 2))
-                zc = str(round((l_all - qxx + 50) / 1000, 2))
+                bw = str(round((qxx - 50) / 1000, 3)) + "~" + str(round(l_all / 1000, 3))
+                zc = str(round((l_all - qxx + 50) / 1000, 3))
             else:
-                bw = "0~" + str(round((l_all) / 1000, 2))
-                zc = str(round((l_all - qxx + 50) / 1000, 2))
+                bw = "0~" + str(round((l_all) / 1000, 3))
+                zc = str(round((l_all - qxx + 50) / 1000, 3))
             all_long += float(zc)
             dict_word = [
                 row["焊缝编号"], bw, zc,
@@ -81,29 +93,49 @@ def process_report(params):
             "100%": '/', "20%": '/', "25%": '/'
         }
         check_and_change(document_retest, replace_replace)  # 替换复探第一页的内容
+        if final_datetime < need_replace_time:  # 日期小于2024.10.17，需要替换公司名称
+            replace_header_text(document, "视正检测", "视正钢结构检测")
+            print(f"{b_no} 日期小于2024.10.17，需要替换公司名称")
         cp = Composer(document_retest)
         # cp.append(document_retest)  # 合并报告
 
         cp.append(doc_second)  # 将结果的第二页文档添加到第一页主文档
         final_date_next = datetime.datetime.strptime(final_date_next, '%Y.%m.%d')
         if final_date_next < need_replace_time:  # 日期小于2024.10.17，需要替换公司名称
-            replace_header_text(doc_second, "常州视正检测有限公司", "常州视正钢结构检测有限公司")
+            replace_header_text(doc_second, "视正检测", "视正钢结构检测")
             print(f"{b_no} 日期小于2024.10.17，需要替换公司名称")
+        # doc_third = Document(r"C:\Users\95609\Desktop\出报告\中环312\五联附件.docx")
+        # cp.append(doc_third) bin # 附件
+        # once_change(document_retest, {"这是报告的编号": b_no})
+        log_info.append([no, no_next, final_date_next, component, weld, all_long, "R1合格"])
         document_retest.save(save_path_retest)  # 保存文件
 
+    # doc_third = Document(r"C:\Users\95609\Desktop\出报告\中环312\五联附件.docx")
+    # cp = Composer(document)
+    # cp.append(doc_third)  # 附件
+    # once_change(document, {"这是报告的编号": b_no})
     document.save(save_path)  # 保存文件
+    return log_info
 
 
-def auto_edit_mt(book_path):
+def auto_edit_mt(book_path, report_type):
     print(Fore.GREEN + "正在处理 " + book_path + " 文件...")
     path_all = os.path.dirname(book_path) + "/"
-    pt_doc = path_all + str(os.path.basename(book_path).split('.')[0]) + ".docx"
+    pt_doc = path_all + "now.docx"
     bk1 = pd.read_excel(book_path, engine='openpyxl', sheet_name="磁粉总体信息", index_col=0,
                         header=None).T.reset_index(drop=True)  # 读取 excel 表, 获取总体信息
     bk2 = pd.read_excel(book_path, engine='openpyxl', sheet_name="磁粉原始记录")  # 读取 excel 表, 获取台账信息
-    first_page = path_all + "A磁粉现场.docx"  # 第一页模板路径
-    res_page = path_all + "A磁粉检测结果页.docx"  # 第二页模板路径
-    res_path = PATH_result + bk1["报告编号"][0][:-4] + "/"
+    print(report_type)
+    if report_type == "yz":
+        first_page = path_all + "A磁粉现场-扬州.docx"  # 第一页模板路径
+        res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
+    elif report_type == "sz":
+        first_page = path_all + "A磁粉现场.docx"  # 第一页模板路径
+        res_page = path_all + "A磁粉检测结果页.docx"  # 第二页模板路径
+    else:
+        print(Fore.RED + f"{report_type}暂不支持！")
+        return
+    res_path = PATH_result + bk1["报告编号"][0] + "/"
     if os.path.exists(res_path):
         shutil.rmtree(res_path)  # 删除已存在的非空结果文件夹
     os.makedirs(res_path)  # 创建结果文件夹
@@ -119,13 +151,31 @@ def auto_edit_mt(book_path):
     grouped = dnf(bk2)  # 按 构件名称、焊缝类型、长度每超150m 分组
     # 准备传递给进程池的参数
     params_list = []
+    log_list = []
     start_no = int(bk1["报告编号"][0][-3:])  # 起始报告编号
+    end_no = start_no + len(grouped) - 1  # 结束报告编号
+
     for no, ((component, weld, g), group) in enumerate(grouped, start_no):
         params_list.append((no, ((component, weld, g), group), pt_doc, res_page, bk1, res_path))
-
     # 使用 multiprocessing
     with Pool(processes=4) as pool:  # 这里可以根据 CPU 核心数调整进程数
-        pool.map(process_report, params_list)
+        log_list += pool.map(process_report, params_list)
+    # 创建工作簿和工作表
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "检测报告数据"
+    headers = ["序号", "报告编号", "报告日期", "构件名称", "检测部位", "检测数量", "结论"]
+    ws.append(headers)  # 写入表头
+    log_list = flatten_nested_list(log_list)
+    for row_data in log_list:  # 使用for循环写入数据
+        ws.append(row_data)
+    # 自动调整列宽（优化显示）
+    for col_idx, _ in enumerate(headers, 1):
+        col_letter = get_column_letter(col_idx)
+        ws.column_dimensions[col_letter].width = 15
+    filename = res_path + str(start_no) + "~" + str(end_no) + ".xlsx"
+    wb.save(filename)
+    shutil.copy2(str(book_path), str(res_path))
     print('所有报告生成完成！')
     # global qx_res
     return res_path

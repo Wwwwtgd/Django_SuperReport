@@ -8,4 +8,5 @@ urlpatterns = [
     path('download_mt_report/', views_mt.download_mt_report, name='download_mt_report'),
     path('update_mt_picture/', views_mt.update_mt_picture, name='update_mt_picture'),
     path('get_mt_list/', views_mt.get_mt_list, name='get_mt_list'),
+    path('handle_mt_report_type/', views_mt.handle_mt_report_type, name='handle_mt_report_type'),
 ]

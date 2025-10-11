@@ -1,4 +1,5 @@
 import pandas as pd
+from colorama import Fore
 
 
 def dnf(df):
@@ -10,18 +11,17 @@ def dnf(df):
     # 创建新的列来标识分组，初始化
     df['分组编号'] = 0
 
-    # 计算累计的 '检测总长度(m)'，并在累计值达到 150000 时分组
+    # 计算累计的 '检测总长度(m)'，并在累计值达到 300 时分组
     for (component, weld), group in grouped:
         cumulative_length = 0
         group_index = 1  # 初始分组编号
         for idx, row in group.iterrows():
             cumulative_length += row['检测总长度(m)']
-
             # 判断是否超过 300000，超过则切换到新的分组
-            if cumulative_length > 300000:
+            if cumulative_length > 190:
                 group_index += 1
                 cumulative_length = row['检测总长度(m)']  # 重置累计值为当前行的检测长度
-
+                print(Fore.GREEN + f"分组 {group_index}：{component} {weld} 累计长度 {cumulative_length:.2f} m")
             df.loc[idx, '分组编号'] = group_index
 
     # 再次按 '构件名称', '焊缝类型' 和 '分组编号' 进行分组
