@@ -135,9 +135,9 @@ def auto_edit_mt(book_path, report_type):
     else:
         print(Fore.RED + f"{report_type}暂不支持！")
         return
-    res_path = PATH_result + bk1["报告编号"][0] + "/"
+    res_path = PATH_result + bk1["报告编号"][0] + "/"  # 删除已存在的非空结果文件夹
     if os.path.exists(res_path):
-        shutil.rmtree(res_path)  # 删除已存在的非空结果文件夹
+        shutil.rmtree(res_path)  # 删除整个结果文件夹
     os.makedirs(res_path)  # 创建结果文件夹
 
     document = Document(first_page)  # 打开第一页

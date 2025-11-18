@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def dnf(df):
-    df['检测日期'] = pd.to_datetime(df['检测日期'], format='%Y.%m.%d', errors='coerce')  # 将'检测日期'列转换为日期类型
+    # df['检测日期'] = pd.to_datetime(df['检测日期'], format='%Y.%m.%d', errors='coerce')  # 将'检测日期'列转换为日期类型
     df['检测总长度(m)'] = pd.to_numeric(df['检测总长度(m)'], errors='coerce')  # 将'检测总长度(m)'列转换为数字类型
     # 按 '构件名称' 和 '焊缝名称' 分组
     grouped = df.groupby(['构件名称', '焊缝类型'], sort=False)

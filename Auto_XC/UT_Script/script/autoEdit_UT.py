@@ -6,6 +6,7 @@ from .add_res import *
 from datetime import timedelta
 from docx import Document
 from .replace_the_dict import *
+from .get_random_temperature import *
 from multiprocessing import Pool
 from colorama import Fore, init
 from openpyxl import Workbook
@@ -150,14 +151,17 @@ def auto_edit_ut(book_path, report_type):
     else:
         print(Fore.RED + f"{report_type}暂不支持！")
         return
-    res_path = PATH_result + bk1["报告编号"][0] + "/"
+    res_path = PATH_result + bk1["报告编号"][0] + "/" # 删除已存在的非空结果文件夹
     if os.path.exists(res_path):
-        shutil.rmtree(res_path)  # 删除已存在的非空结果文件夹
+        shutil.rmtree(res_path)  # 删除整个结果文件夹
     os.makedirs(res_path)  # 创建结果文件夹
 
     document = Document(first_page)  # 打开第一页
+    bk2['检测日期'] = pd.to_datetime(bk2['检测日期'], format='%Y.%m.%d', errors='coerce')  # 将'检测日期'列转换为日期类型
+    max_date = bk2['检测日期'].max()
+    temperature = str(get_random_temperature(max_date)) + "℃"
     replace_dict = {}  # 定义一个空字典来存储替换内容
-    replace_the_dict(bk1, replace_dict)  # 设置第一页的替换字典
+    replace_the_dict(bk1, replace_dict, temperature)  # 设置第一页的替换字典
     check_and_change(document, replace_dict)  # 替换第一页的内容
     p_res = PATH_TEMPLATE + "示意图.png"
     add_syt(document, p_res)
@@ -191,7 +195,6 @@ def auto_edit_ut(book_path, report_type):
     filename = res_path + str(start_no) + "~" + str(end_no) + ".xlsx"
     wb.save(filename)
     shutil.copy2(str(book_path), str(res_path))
-
 
     print('所有报告生成完成！')
     # global qx_res
