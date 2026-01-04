@@ -43,7 +43,8 @@
             <select name="report_type" lay-filter="reportType">
                 <option value="">-请选择报告类型-</option>
                 <option value="sz">原视正正常报告</option>
-                <option value="yz">带扬州抬头报告</option>
+                <option value="yz-63">扬州-合同号63报告</option>
+                <option value="yz-65">扬州-合同号65报告</option>
             </select>
         </div>
     </div>
@@ -75,8 +76,11 @@
           report_type: data.value,
           csrfmiddlewaretoken: '{{ csrf_token }}'
         }, function() {
-            if (data.value == 'yz') {
-                layer.msg('已选择: ' + "扬州报告模板", {icon: 1});
+            if (data.value == 'yz-63') {
+                layer.msg('已选择: ' + "扬州63报告模板", {icon: 1});
+            }
+            else if (data.value =='yz-65') {
+                layer.msg('已选择: ' + "扬州65报告模板", {icon: 1});
             }
             else if (data.value =='sz') {
                 layer.msg('已选择: ' + "视正报告模板", {icon: 1});

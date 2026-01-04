@@ -13,12 +13,12 @@ result_path = PATH_result
 
 
 def download_ut_base_excel(request):
-    file_path = PATH_template + 'A_UT模板.xlsx'
+    file_path = PATH_template + 'A_无损模板.xlsx'
     if os.path.exists(file_path):
         with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(),
                                     content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename="UT_list.xlsx"'  # 设置下载文件的名称
+            response['Content-Disposition'] = 'attachment; filename="NDT_list.xlsx"'  # 设置下载文件的名称
             return response
     else:
         return HttpResponse('File not found.', status=404)
@@ -37,7 +37,8 @@ def download_ut_report(request):
     # 设置响应头，告知浏览器是文件下载
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer.read(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="ut_report.zip"'
+    name = os.path.basename(folder_path.rstrip('/\\'))
+    response['Content-Disposition'] = 'attachment; filename="'+name+'.zip"'
     return response
 
 

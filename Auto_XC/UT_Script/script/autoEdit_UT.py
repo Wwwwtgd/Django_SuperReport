@@ -142,8 +142,11 @@ def auto_edit_ut(book_path, report_type):
     bk1 = pd.read_excel(book_path, engine='openpyxl', sheet_name="超声总体信息", index_col=0, header=None).T.reset_index(drop=True)  # 读取 excel 表, 获取总体信息
     bk2 = pd.read_excel(book_path, engine='openpyxl', sheet_name="超声原始记录")  # 读取 excel 表, 获取台账信息
     print(report_type)
-    if report_type == "yz":
-        first_page = path_all + "A超声现场-扬州.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
+    if report_type == "yz-63":
+        first_page = path_all + "A超声现场-扬州-63.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
+        res_page = path_all + "A超声检测结果页-扬州.docx"  # 第二页模板路径
+    elif report_type == "yz-65":
+        first_page = path_all + "A超声现场-扬州-65.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
         res_page = path_all + "A超声检测结果页-扬州.docx"  # 第二页模板路径
     elif report_type == "sz":
         first_page = path_all + "A超声现场.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
