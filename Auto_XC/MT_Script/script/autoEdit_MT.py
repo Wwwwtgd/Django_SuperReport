@@ -138,6 +138,9 @@ def auto_edit_mt(book_path, report_type):
     elif report_type == "yz-65-wx":
         first_page = path_all + "A磁粉现场-扬州-65-纬信.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
         res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
+    elif report_type == "sz":
+        first_page = path_all + "A磁粉现场.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
+        res_page = path_all + "A磁粉检测结果页.docx"  # 第二页模板路径
     else:
         print(Fore.RED + f"{report_type}暂不支持！")
         return
