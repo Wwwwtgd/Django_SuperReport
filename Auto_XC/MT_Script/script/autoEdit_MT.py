@@ -126,15 +126,18 @@ def auto_edit_mt(book_path, report_type):
                         header=None).T.reset_index(drop=True)  # 读取 excel 表, 获取总体信息
     bk2 = pd.read_excel(book_path, engine='openpyxl', sheet_name="磁粉原始记录")  # 读取 excel 表, 获取台账信息
     print(report_type)
-    if report_type == "yz-63":
-        first_page = path_all + "A磁粉现场-扬州-63.docx"  # 第一页模板路径
+    if report_type == "yz-63-dn":
+        first_page = path_all + "A磁粉现场-扬州-63-东南.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
         res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
-    elif report_type == "yz-65":
-        first_page = path_all + "A磁粉现场-扬州-65.docx"  # 第一页模板路径
+    elif report_type == "yz-63-rt":
+        first_page = path_all + "A磁粉现场-扬州-63-润通.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
         res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
-    elif report_type == "sz":
-        first_page = path_all + "A磁粉现场.docx"  # 第一页模板路径
-        res_page = path_all + "A磁粉检测结果页.docx"  # 第二页模板路径
+    elif report_type == "yz-65-dn":
+        first_page = path_all + "A磁粉现场-扬州-65-东南.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
+        res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
+    elif report_type == "yz-65-wx":
+        first_page = path_all + "A磁粉现场-扬州-65-纬信.docx"  # 第一页模板路径  "A超声现场-扬州.docx"
+        res_page = path_all + "A磁粉检测结果页-扬州.docx"  # 第二页模板路径
     else:
         print(Fore.RED + f"{report_type}暂不支持！")
         return
