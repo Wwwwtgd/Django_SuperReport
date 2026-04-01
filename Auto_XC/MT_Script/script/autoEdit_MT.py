@@ -162,7 +162,6 @@ def auto_edit_mt(book_path, report_type):
     params_list = []
     log_list = []
     start_no = int(bk1["报告编号"][0][-3:])  # 起始报告编号
-    end_no = start_no + len(grouped) - 1  # 结束报告编号
 
     for no, ((component, weld, g), group) in enumerate(grouped, start_no):
         params_list.append((no, ((component, weld, g), group), pt_doc, res_page, bk1, res_path))
@@ -182,6 +181,7 @@ def auto_edit_mt(book_path, report_type):
     for col_idx, _ in enumerate(headers, 1):
         col_letter = get_column_letter(col_idx)
         ws.column_dimensions[col_letter].width = 15
+    end_no = start_no + len(params_list) - 1  # 结束报告编号
     filename = res_path + str(start_no) + "~" + str(end_no) + ".xlsx"
     wb.save(filename)
     shutil.copy2(str(book_path), str(res_path))

@@ -178,7 +178,7 @@ def auto_edit_ut(book_path, report_type):
     print(f'第一页模板报告已生成: {pt_doc}')
     grouped = dnf(bk2)  # 按构件名称、焊缝类型、长度每超150m 分组
     start_no = int(bk1["报告编号"][0][-3:])  # 起始报告编号
-    end_no = start_no + len(grouped) - 1  # 结束报告编号
+
 
     # 准备传递给进程池的参数
     params_list = []
@@ -201,6 +201,7 @@ def auto_edit_ut(book_path, report_type):
     for col_idx, _ in enumerate(headers, 1):
         col_letter = get_column_letter(col_idx)
         ws.column_dimensions[col_letter].width = 15
+    end_no = start_no + len(params_list) - 1  # 结束报告编号
     filename = res_path + str(start_no) + "~" + str(end_no) + ".xlsx"
     wb.save(filename)
     shutil.copy2(str(book_path), str(res_path))
