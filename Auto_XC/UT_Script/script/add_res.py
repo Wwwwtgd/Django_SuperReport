@@ -86,11 +86,11 @@ def format_number(num):
         return str(num)
     if str(num) == "nan":
         return "/"
-    if num > 26 or num <=0:
+    if num > 26 or num <= 0:
         if isinstance(num, int) or (isinstance(num, float) and num % 1 == 0):
             return int(num)
-        return "{0:.1f}".format(num)  # 整数保留一位小数
+        return format(num, '.6f').rstrip('0')
     else:
         # 去除小数部分多余的0
-        formatted = "{0:.10f}".format(num).rstrip('0').rstrip('.') if '.' in "{0:.10f}".format(num) else str(num)
-        return formatted if '.' in formatted else formatted + '.0'  # 确保整数情况已被处理
+        s = format(num, '.6f').rstrip('0').rstrip('.')
+        return s + '.0' if '.' not in s else s
